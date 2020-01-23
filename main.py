@@ -76,9 +76,6 @@ class dfs:
     def colorflip(self, color):
         if color == "1":
             return "0"
-
-        if color == "0":
-            return "1"
         return "1"
 
     def newBoard(self, x, y, m):
@@ -91,11 +88,9 @@ class dfs:
         matrix[x][y] = self.colorflip(matrix[x][y])
 
         if (left >= 0):
-
             matrix[left][y] = self.colorflip(matrix[left][y])
 
         if (right < self.size):
-
             matrix[right][y] = self.colorflip(matrix[right][y])
 
         if (top >= 0):
@@ -111,8 +106,6 @@ n = Node()
 graph = n.createGraph("111001011", 3)
 #graph = n.createGraph("1001", 2)
 
-for l in graph:
-    print(l)
 dfs = dfs()
 dfs.size = 3
 dfs.maxDepth = 15
