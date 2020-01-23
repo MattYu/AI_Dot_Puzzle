@@ -47,8 +47,6 @@ class dfs:
         stack.append(self.origin)
 
         while stack:
-            print("!!!!!!!!!!!!!!!!!!!")
-            print()
             current = stack.pop()
             #print(len(stack))
             #if (True):
@@ -59,10 +57,8 @@ class dfs:
                         depth = current.depth + 1
 
                         serialMatrix = str(newMatrix)
-                        print()
-                        for l in newMatrix:
-                            print(l)
-                        n = Node(parent=current, matrix=newMatrix, move= str(i) + str(j), depth = depth)
+
+                        n = Node(parent=current, matrix=newMatrix, move= str(i) + "-" + str(j), depth = depth)
 
 
                         if serialMatrix in self.seen:
@@ -134,7 +130,18 @@ dfs.expectedResult = str(n.createGraph("000000000", 3))
 ans = dfs.run()
 
 print(dfs.expectedResult)
-print(ans.matrix)
+
+res = ans
+step = 0
+while ans != None:
+    print("step:")
+    step +=1
+    print(ans.move)
+    for l in ans.matrix:
+        print(l)
+    
+    ans = ans.parentNode
+
 '''
 ans = dfs.newBoard(0, 2, graph)
 print()
