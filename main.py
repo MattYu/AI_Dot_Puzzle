@@ -1,4 +1,6 @@
 from collections import deque
+from copy import deepcopy
+
 
 
 class Node:
@@ -45,25 +47,31 @@ class dfs:
         stack.append(self.origin)
 
         while stack:
+            print("!!!!!!!!!!!!!!!!!!!")
+            print()
             current = stack.pop()
-
+            #print(len(stack))
+            #if (True):
             if (current.depth <= self.maxDepth):
                 for i in range (0, self.size):
                     for j in range (0, self.size):
-                        
                         newMatrix = self.newBoard(i, j, current.matrix)
                         depth = current.depth + 1
 
                         serialMatrix = str(newMatrix)
-
+                        print()
+                        for l in newMatrix:
+                            print(l)
                         n = Node(parent=current, matrix=newMatrix, move= str(i) + str(j), depth = depth)
+
 
                         if serialMatrix in self.seen:
                             if self.seen[serialMatrix].depth > depth:
                                 self.seen[serialMatrix] = n
                         else:
                             stack.append(n)
-                        
+                            self.seen[serialMatrix] = n
+                                               
                         if serialMatrix == self.expectedResult:
                             return n
 
@@ -72,10 +80,13 @@ class dfs:
     def colorflip(self, color):
         if color == "1":
             return "0"
+
+        if color == "0":
+            return "1"
         return "1"
 
-    def newBoard(self, x, y, matrix):
-
+    def newBoard(self, x, y, m):
+        matrix = deepcopy(m)
         left = x - 1
         right = x + 1
         bottom = y + 1
@@ -101,13 +112,14 @@ class dfs:
 
     
 n = Node()
-graph = n.createGraph("101000111", 3)
+graph = n.createGraph("111001011", 3)
+#graph = n.createGraph("1001", 2)
 
 for l in graph:
     print(l)
 dfs = dfs()
 dfs.size = 3
-dfs.maxDepth = 7
+dfs.maxDepth = 15
 dfs.solution = str(graph)
 
 
@@ -117,12 +129,12 @@ node.depth = 0
 node.matrix = graph
 dfs.origin = node
 
-dfs.expected = str(n.createGraph("000000000", 3))
-
+dfs.expectedResult = str(n.createGraph("000000000", 3))
+#dfs.expectedResult = str(n.createGraph("0000", 2))
 ans = dfs.run()
 
-
-print(ans)
+print(dfs.expectedResult)
+print(ans.matrix)
 '''
 ans = dfs.newBoard(0, 2, graph)
 print()
