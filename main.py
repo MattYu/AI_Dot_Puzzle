@@ -13,9 +13,6 @@ class Node:
 
     def createGraph(self, string, size):
         return self._chunkIt(string, size)
-    
-
-
 
     # from stackoverflow
     def _chunkIt(self, seq, num):
@@ -49,10 +46,13 @@ class dfs:
 
         while stack:
             current = stack.pop()
-
-            if (current.depth < self.maxDepth):
+            
+            if (current.depth <= self.maxDepth):
                 path.write("0\t0\t0\t")
                 path.write(self.matrixToString(current.matrix)+"\n")
+                
+                if str(current.matrix) == self.expectedResult:
+                    return current
                 
                 priority = []
                 for i in range (0, self.size):
@@ -63,9 +63,6 @@ class dfs:
                         serialMatrix = str(newMatrix)
 
                         n = Node(parent=current, matrix=newMatrix, move= chr(i + 65) + str(j), depth = depth)
-                                               
-                        if serialMatrix == self.expectedResult:
-                            return n
                         
                         if serialMatrix in self.seen:
                             if self.seen[serialMatrix].depth > depth:
@@ -76,11 +73,6 @@ class dfs:
                             
                 priority.sort(key=lambda x: x.matrix, reverse=True)
                 stack.extend(priority)
-                
-           # if (current.depth == self.maxDepth):
-            #    if str(current.matrix) == self.expectedResult:
-            #        return n
-                
 
 
     def colorflip(self, color):
