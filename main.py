@@ -2,7 +2,6 @@ from collections import deque
 from copy import deepcopy
 
 
-
 class Node:
 
     def __init__(self, *args, **kwargs):
@@ -14,6 +13,8 @@ class Node:
 
     def createGraph(self, string, size):
         return self._chunkIt(string, size)
+    
+
 
 
     # from stackoverflow
@@ -40,7 +41,7 @@ class dfs:
         self.expectedResult = kwargs.pop('expected', None)
         self.solution = None
 
-    def run(self):
+    def run(self, path):
 
         stack = deque()
 
@@ -51,6 +52,10 @@ class dfs:
             #print(len(stack))
             #if (True):
             if (current.depth <= self.maxDepth):
+                path.write("0\t0\t0\t")
+                path.write(self.matrixToString(current.matrix)+"\n")
+                
+                priority = []
                 for i in range (0, self.size):
                     for j in range (0, self.size):
                         newMatrix = self.newBoard(i, j, current.matrix)
@@ -58,20 +63,20 @@ class dfs:
 
                         serialMatrix = str(newMatrix)
 
-                        n = Node(parent=current, matrix=newMatrix, move= str(i) + "-" + str(j), depth = depth)
-
-
+                        n = Node(parent=current, matrix=newMatrix, move= chr(i + 65) + str(j), depth = depth)
+                                               
+                        if serialMatrix == self.expectedResult:
+                            return n
+                        
                         if serialMatrix in self.seen:
                             if self.seen[serialMatrix].depth > depth:
                                 self.seen[serialMatrix] = n
                         else:
-                            stack.append(n)
+                            priority.append(n)
                             self.seen[serialMatrix] = n
-                                               
-                        if serialMatrix == self.expectedResult:
-                            return n
-
-
+                            
+                priority.sort(key=lambda x: x.matrix, reverse=True)
+                stack.extend(priority)
 
     def colorflip(self, color):
         if color == "1":
@@ -100,40 +105,59 @@ class dfs:
             matrix[x][bottom] = self.colorflip(matrix[x][bottom])
 
         return matrix
+    
+    def matrixToString(self, matrix):
+        return ''.join([''.join(element) for element in matrix])
 
     
 n = Node()
-graph = n.createGraph("111001011", 3)
-#graph = n.createGraph("1001", 2)
-
 dfs = dfs()
-dfs.size = 3
-dfs.maxDepth = 15
-dfs.solution = str(graph)
+input_file = open("input.txt", "r")
+line_nbr = 0
 
-
-
-node = Node()
-node.depth = 0
-node.matrix = graph
-dfs.origin = node
-
-dfs.expectedResult = str(n.createGraph("000000000", 3))
-#dfs.expectedResult = str(n.createGraph("0000", 2))
-ans = dfs.run()
-
-print(dfs.expectedResult)
-
-res = ans
-step = 0
-while ans != None:
-    print("step:")
-    step +=1
-    print(ans.move)
-    for l in ans.matrix:
-        print(l)
+for line in input_file:
+    solution = open(str(line_nbr)+"_dfs_solution.txt", "w")
+    search = open(str(line_nbr)+"_dfs_search.txt", "w")
     
-    ans = ans.parentNode
+    data = line.split()
+    size = int(data[0])
+    max_d = int(data[1])
+    max_l = int(data[2])
+    puzzle = data[3]
+
+    graph = n.createGraph(puzzle, size)
+
+    dfs.size = size
+    dfs.maxDepth = max_d
+    dfs.solution = str(graph)
+
+    node = Node()
+    node.depth = 1
+    node.move = '0 '
+    node.matrix = graph
+    
+    dfs.origin = node
+    dfs.expectedResult = str(n.createGraph("0"*(size*size), size))
+    ans = dfs.run(search)
+
+    res = ans
+    if ans == None:
+        solution.write("No solution")
+    while ans != None:
+        #content = solution.read()
+        #solution.seek(0,0)
+        #solution.write('\n'+ ans.move.rstrip('\r\n') + ' ')
+        solution.write(ans.move + ' ')
+        solution.write(''.join([''.join(element) for element in ans.matrix])+'\n')
+        #solution.write(content)
+
+        ans = ans.parentNode
+        
+    line_nbr += 1
+        
+input_file.close()
+solution.close()
+search.close()
 
 '''
 ans = dfs.newBoard(0, 2, graph)
