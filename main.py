@@ -5,7 +5,7 @@ from copy import deepcopy
 class Node:
 
     def __init__(self, *args, **kwargs):
-        self.depth = kwargs.pop('depth', 0)
+        self.depth = kwargs.pop('depth', 1)
         self.parentNode = kwargs.pop('parent', None)
         self.matrix = kwargs.pop('matrix', None)
         self.move = kwargs.pop('move', '')
@@ -49,9 +49,8 @@ class dfs:
 
         while stack:
             current = stack.pop()
-            #print(len(stack))
-            #if (True):
-            if (current.depth <= self.maxDepth):
+
+            if (current.depth < self.maxDepth):
                 path.write("0\t0\t0\t")
                 path.write(self.matrixToString(current.matrix)+"\n")
                 
@@ -77,6 +76,12 @@ class dfs:
                             
                 priority.sort(key=lambda x: x.matrix, reverse=True)
                 stack.extend(priority)
+                
+           # if (current.depth == self.maxDepth):
+            #    if str(current.matrix) == self.expectedResult:
+            #        return n
+                
+
 
     def colorflip(self, color):
         if color == "1":
@@ -141,17 +146,16 @@ for line in input_file:
     ans = dfs.run(search)
 
     res = ans
+    path = []
     if ans == None:
         solution.write("No solution")
     while ans != None:
-        #content = solution.read()
-        #solution.seek(0,0)
-        #solution.write('\n'+ ans.move.rstrip('\r\n') + ' ')
-        solution.write(ans.move + ' ')
-        solution.write(''.join([''.join(element) for element in ans.matrix])+'\n')
-        #solution.write(content)
-
+        path.append(ans)
         ans = ans.parentNode
+        
+    for sol in reversed(path):
+        solution.write(sol.move + ' ')
+        solution.write(''.join([''.join(element) for element in sol.matrix])+'\n')
         
     line_nbr += 1
         
