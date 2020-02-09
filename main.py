@@ -49,9 +49,8 @@ class dfs:
 
         while stack:
             current = stack.pop()
-            #print(len(stack))
-            #if (True):
-            if (current.depth <= self.maxDepth):
+
+            if (current.depth < self.maxDepth):
                 path.write("0\t0\t0\t")
                 path.write(self.matrixToString(current.matrix)+"\n")
                 
@@ -77,6 +76,11 @@ class dfs:
                             
                 priority.sort(key=lambda x: x.matrix, reverse=True)
                 stack.extend(priority)
+                
+           # if (current.depth == self.maxDepth):
+            #    if str(current.matrix) == self.expectedResult:
+            #        return n
+                
 
 
     def colorflip(self, color):
@@ -147,13 +151,6 @@ for line in input_file:
         solution.write("No solution")
     while ans != None:
         path.append(ans)
-        #content = solution.read()
-        #solution.seek(0,0)
-        #solution.write('\n'+ ans.move.rstrip('\r\n') + ' ')
-        #solution.write(ans.move + ' ')
-        #solution.write(''.join([''.join(element) for element in ans.matrix])+'\n')
-        #solution.write(content)
-
         ans = ans.parentNode
         
     for sol in reversed(path):
