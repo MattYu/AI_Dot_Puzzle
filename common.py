@@ -49,6 +49,7 @@ class Matrix:
         self.matrix = kwargs.pop('matrix', None)
         self.expectedResult = kwargs.pop('expected', None)
         self.solution = None
+        self.type = ""
 
     def colorflip(self, color):
         if color == "1":
@@ -80,3 +81,52 @@ class Matrix:
     
     def matrixToString(self, matrix):
         return ''.join([''.join(element) for element in matrix])
+
+    def writeOutput(self):
+        n = Node()
+        input_file = open("input.txt", "r")
+        line_nbr = 0
+
+        for line in input_file:
+            solution = open(str(line_nbr)+"_" + self.type + "_solution.txt", "w")
+            search = open(str(line_nbr)+ "_" + self.type + "_search.txt", "w")
+            self.seen = {}
+            
+            data = line.split()
+            size = int(data[0])
+            max_d = int(data[1])
+            max_l = int(data[2])
+            puzzle = data[3]
+
+            graph = n.createGraph(puzzle, size)
+
+            self.size = size
+            self.maxDepth = max_d
+            self.solution = str(graph)
+
+            node = Node()
+            node.depth = 1
+            node.move = '0 '
+            node.matrix = graph
+            
+            self.startNode = node
+            self.expectedResult = str(n.createGraph("0"*(size*size), size))
+            ans = self.run(search)
+
+            res = ans
+            path = []
+            if ans == None:
+                solution.write("No solution")
+            while ans != None:
+                path.append(ans)
+                ans = ans.parentNode
+                
+            for sol in reversed(path):
+                solution.write(sol.move + ' ')
+                solution.write(''.join([''.join(element) for element in sol.matrix])+'\n')
+                
+            line_nbr += 1
+                
+        input_file.close()
+        solution.close()
+        search.close()
