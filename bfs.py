@@ -65,7 +65,7 @@ class BFS(Matrix):
                         
                         if serialMatrix in self.seen:
                             if self.seen[serialMatrix].f > n.f:
-                                self.seen[serialMatrix].parent = n.parent
+                                self.seen[serialMatrix].parentNode = n.parentNode
                                 self.seen[serialMatrix].f = n.f
                                 self.seen[serialMatrix].g = n.g
                                 self.seen[serialMatrix].h = n.h
@@ -88,7 +88,6 @@ class BFS(Matrix):
         return 0
 
 if __name__ == "__main__":
-    n = Node()
     bfs = BFS()
     if len(sys.argv) > 1:
         bfs.maxExploratoryDepth = int(sys.argv[1])
