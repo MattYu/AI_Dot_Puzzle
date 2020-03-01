@@ -12,11 +12,8 @@ class A(BFS):
         super().__init__(*args, **kwargs)
         self.type = "astar"
 
-    def getF(self, node):
-        return node.h + node.g
-
     def getG(self, node):
-        return node.parentNode.f
+        return node.parentNode.g + 1
 
 if __name__ == "__main__":
     A = A()

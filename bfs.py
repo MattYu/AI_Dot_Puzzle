@@ -4,6 +4,7 @@ from functools import cmp_to_key
 from common import Matrix, Node
 import heapq
 import sys 
+import math
 
 class BFS(Matrix):
 
@@ -33,11 +34,11 @@ class BFS(Matrix):
 
     def run(self, path):
         h = []
-
         count = 0
-        self.startNode.f = self.getHScoreFromString(str(self.startNode.matrix))
-        self.startNode.h = self.startNode.f
+
+        self.startNode.h = self.getHScoreFromString(str(self.startNode.matrix))
         self.startNode.g = 0
+        self.startNode.f = self.startNode.h
 
         heapq.heappush(h, self.startNode)
 
@@ -78,14 +79,19 @@ class BFS(Matrix):
                             self.seen[serialMatrix] = n
 
     def getHScoreFromString(self, s):
-        res = 0
+        nbrOnes = 0
         for i in s:
             if i == '1':
-                res += 1
-        return res
+                nbrOnes += 1
+        if nbrOnes == 1:
+            return 3
+        if nbrOnes == 2:
+            return 2
+        else :
+            return math.ceil(nbrOnes/5)
 
     def getF(self, node):
-        return node.h
+        return node.h + node.g
 
     def getG(self, node):
         return 0
