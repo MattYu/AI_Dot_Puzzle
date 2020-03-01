@@ -7,6 +7,8 @@ How to run the program on Windows:
     2.1 - Use same format as mentionned in section 2.3 of Project 1 Handout
 3- Open Anaconda terminal
 4- Navigate to the directory where the files in step 1 were extracted
-5- Run the following command:
-    >python main.py
+5- Run the following commands:
+    >python dfs.py
+    >python bfs.py
+    >python astar.py
 6- The output files will be generated in the directory
