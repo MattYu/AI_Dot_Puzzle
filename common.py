@@ -27,7 +27,7 @@ class Node:
 
     
     def _chunkIt(self, seq, num):
-        # from stackoverflow. Convert string into 2x2 matrix to facilitate flipping
+        # from stackoverflow. Convert string into nxn matrix to facilitate flipping
         avg = len(seq) / float(num)
         out = []
         last = 0.0
