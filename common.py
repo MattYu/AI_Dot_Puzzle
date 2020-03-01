@@ -14,7 +14,7 @@ class Node:
         self.f = kwargs.pop('f', 0)
         self.g = kwargs.pop('g', 0)
         self.h = kwargs.pop('h', 0)
-        self.exporatoryDepth = kwargs.pop('exploratoryDepth', 0)
+        self.exploratoryDepth = kwargs.pop('exploratoryDepth', 0)
 
     def createGraph(self, string, size):
         return self._chunkIt(string, size)
@@ -45,6 +45,7 @@ class Matrix:
         self.size = kwargs.pop('size', None)
         self.solution = kwargs.pop('graph', None)
         self.maxDepth = kwargs.pop('depth', None)
+        self.maxLength = kwargs.pop('maxL', None)
         self.startNode = kwargs.pop('startNode', None)
         self.matrix = kwargs.pop('matrix', None)
         self.expectedResult = kwargs.pop('expected', None)
@@ -102,11 +103,12 @@ class Matrix:
 
             self.size = size
             self.maxDepth = max_d
+            self.maxLength = max_l
             self.solution = str(graph)
 
             node = Node()
             node.depth = 1
-            node.move = '0 '
+            node.move = '0'
             node.matrix = graph
             
             self.startNode = node
@@ -116,7 +118,7 @@ class Matrix:
             res = ans
             path = []
             if ans == None:
-                solution.write("No solution")
+                solution.write("no solution")
             while ans != None:
                 path.append(ans)
                 ans = ans.parentNode
