@@ -29,7 +29,7 @@ class dfs(Matrix):
                 maxDepth = current.depth
             
             if (current.depth <= self.maxDepth):
-                path.write("0\t0\t0\t")
+                path.write("0 0 0 ")
                 path.write(self.matrixToString(current.matrix)+"\n")
                 
                 if str(current.matrix) == self.expectedResult:

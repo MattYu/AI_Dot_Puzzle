@@ -4,6 +4,7 @@ from functools import cmp_to_key
 from common import Matrix, Node
 import heapq
 import sys 
+import math
 
 class BFS(Matrix):
 
@@ -18,13 +19,14 @@ class BFS(Matrix):
         res = self.getHScoreFromString(str(currentMatrix.matrix))
         while stack:
             current = stack.pop()
-            if (current.exporatoryDepth <= maxDepth):
-                res = min(res, self.getHScoreFromString(str(current.matrix)))
+            if (current.exploratoryDepth <= maxDepth):
+                currentH = self.getHScoreFromString(str(current.matrix)) + current.exploratoryDepth
+                res = min(res, currentH)
 
                 for i in range (0, self.size):
                     for j in range (0, self.size):
                         newMatrix = self.newBoard(i, j, current.matrix)
-                        exploratoryDepth = current.exporatoryDepth + 1
+                        exploratoryDepth = current.exploratoryDepth + 1
                         serialMatrix = str(newMatrix)
                         n = Node(parent=None, matrix=newMatrix, exploratoryDepth = exploratoryDepth)
                         stack.append(n)
@@ -32,19 +34,21 @@ class BFS(Matrix):
 
     def run(self, path):
         h = []
+        count = 0
 
-        self.startNode.f = self.getHScoreFromString(str(self.startNode.matrix))
-        self.startNode.h = self.startNode.f
+        self.startNode.h = self.getHScoreFromString(str(self.startNode.matrix))
         self.startNode.g = 0
+        self.startNode.f = self.startNode.h
 
         heapq.heappush(h, self.startNode)
 
         while h:
             current = heapq.heappop(h)
+            count = count + 1
 
-            if (current.depth <= self.maxDepth):
+            if (count <= self.maxLength):
 
-                path.write(str(current.f) + "\t" + str(current.h) + "\t" + str(current.g) + "\t")
+                path.write(str(current.f) + " " + str(current.g) + " " + str(current.h) + " ")
                 path.write(self.matrixToString(current.matrix)+"\n")
                 
                 if str(current.matrix) == self.expectedResult:
@@ -57,7 +61,7 @@ class BFS(Matrix):
 
                         serialMatrix = str(newMatrix)
                         n = Node(parent=current, matrix=newMatrix, move= chr(i + 65) + str(j), depth = depth)
-                        n.maxExploratoryDepth = 0
+                        n.exploratoryDepth = 0
 
                         n.h = self.getMinHWithExploratorySearch(n, self.maxExploratoryDepth)
                         n.g = self.getG(n)
@@ -75,14 +79,19 @@ class BFS(Matrix):
                             self.seen[serialMatrix] = n
 
     def getHScoreFromString(self, s):
-        res = 0
+        nbrOnes = 0
         for i in s:
             if i == '1':
-                res += 1
-        return res
+                nbrOnes += 1
+        if nbrOnes == 1:
+            return 3
+        if nbrOnes == 2:
+            return 2
+        else :
+            return math.ceil(nbrOnes/5)
 
     def getF(self, node):
-        return node.h
+        return node.h + node.g
 
     def getG(self, node):
         return 0
