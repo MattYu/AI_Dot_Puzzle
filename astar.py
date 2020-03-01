@@ -10,7 +10,7 @@ class A(BFS):
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
-        self.type = "A"
+        self.type = "astar"
 
     def getF(self, node):
         return node.h + node.g
